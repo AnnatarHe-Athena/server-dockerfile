@@ -1,0 +1,27 @@
+version: '2'
+services:
+    db:
+        image: postgres
+        volumes:
+            - ~/code/douban-girls/server-dockerfile/data:/var/lib/postgresql/data
+        environment:
+            - POSTGRES_PASSWORD=admin
+        ports:
+            - "5432:5432"
+    redis:
+        image: redis
+        ports:
+            - "6379:6379"
+    revel:
+        image: annatarhe/revel:0.13.1
+        volumes:
+            - ~/code/golang/src:/go/src
+        command: revel run github.com/douban-girls/douban-girls-server
+        ports:
+            - "9000:9000"
+        depends_on:
+            - redis
+            - db
+        links:
+            - db
+            - redis
