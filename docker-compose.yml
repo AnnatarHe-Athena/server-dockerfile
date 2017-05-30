@@ -25,3 +25,21 @@ services:
         links:
             - db
             - redis
+    pro-crawler:
+        image: golang:1.8.3
+        volumes:
+            - ~/code/douban-girls/server-dockerfile/crawler:/tmp
+        # the build file must be named as `go-crawler`
+        command: ./tmp/go-crawler
+        links:
+            - db
+    dev-crawler:
+        image: golang:1.8.3
+        volumes:
+            - ~/code/golang/src:/go/src
+        # the build file must be named as `go-crawler`
+        command: go run /go/src/github.com/douban-girls/crawler/main.go
+        depends_on:
+            - db
+        links:
+            - db
