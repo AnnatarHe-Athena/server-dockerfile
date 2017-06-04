@@ -3,7 +3,7 @@ services:
     db:
         image: postgres
         volumes:
-            - ~/code/douban-girls/server-dockerfile/data:/var/lib/postgresql/data
+            - ~/sites/server-dockerfile/data:/var/lib/postgresql/data
         environment:
             - POSTGRES_PASSWORD=admin
         ports:
@@ -15,8 +15,8 @@ services:
     revel:
         image: annatarhe/revel:v0.0.4
         volumes:
-            - ~/sites/douban-girls/server-dockerfile/production:/go/src
-        command: bash run.sh
+            - ~/sites/server-dockerfile/production:/go
+        command: ./run.sh
         ports:
             - "9000:9000"
         depends_on:
