@@ -43,3 +43,14 @@ services:
             - db
         links:
             - db
+    crawler-py:
+        image: annatarhe/scrapy:v0.1
+        volumes:
+            - d:/github/douban-girls/crawler:/py
+        command: scrapy crawl dbmeinv
+        links:
+            - redis
+            - db
+        depends_on:
+            - redis
+            - db

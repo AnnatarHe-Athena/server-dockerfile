@@ -47,7 +47,7 @@ services:
             - db
     crawler-py:
         image: annatarhe/scrapy:v0.1
-        volumes: 
+        volumes:
             - d:/github/douban-girls/crawler:/py
         command: scrapy crawl dbmeinv
         links:
