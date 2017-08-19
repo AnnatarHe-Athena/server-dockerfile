@@ -12,17 +12,7 @@ services:
         image: redis
         ports:
             - "6379:6379"
-    node:
-        image: node:latest
-        ports:
-            - "9000:9000"
-        volumes:
-            - d:/github/douban-girls/server:/usr/src/app
-        depends_on:
-            - redis
-            - db
-        working_dir: /usr/src/app
-        command: npm run dev
+
     revel:
         image: annatarhe/revel:v0.0.4
         volumes:
@@ -54,6 +44,17 @@ services:
         depends_on:
             - db
         links:
+            - db
+    crawler-py:
+        image: annatarhe/scrapy:v0.1
+        volumes: 
+            - d:/github/douban-girls/crawler:/py
+        command: scrapy crawl dbmeinv
+        links:
+            - redis
+            - db
+        depends_on:
+            - redis
             - db
 
 #  NTFS in windows
