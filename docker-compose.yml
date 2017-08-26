@@ -3,7 +3,7 @@ services:
     db:
         image: postgres
         volumes:
-            - pgdata:/var/lib/postgresql/data
+            - ~/code/douban-girls/server-dockerfile/data:/var/lib/postgresql/data
         environment:
             - POSTGRES_PASSWORD=admin
         ports:
@@ -12,12 +12,13 @@ services:
         image: redis
         ports:
             - "6379:6379"
+    # 已废弃
     node:
         image: node:latest
         ports:
             - "9000:9000"
         volumes:
-            - d:/github/douban-girls/server:/usr/src/app
+            - ~/code/golang/src/github.com/douban-girls/douban-girls-server:/usr/src/app
         depends_on:
             - redis
             - db
@@ -26,7 +27,7 @@ services:
     revel:
         image: annatarhe/revel:v0.0.4
         volumes:
-            - d:/github/golang/src:/go/src
+            - ~/code/golang/src:/go/src
         command: revel run github.com/douban-girls/douban-girls-server
         environment:
             - GOROOT_BOOTSTRAP=/usr/local/go
@@ -41,7 +42,7 @@ services:
     pro-crawler:
         image: golang:1.8.3
         volumes:
-            - d:/github/golang/src:/tmp
+            - ~/code/golang/src:/go/src
         # the build file must be named as `go-crawler`
         command: ./tmp/go-crawler
         links:
@@ -49,7 +50,7 @@ services:
     dev-crawler:
         image: golang:1.8.3
         volumes:
-            - d:/github/golang/src:/go/src
+            - ~/code/golang/src:/go/src
         command: go run /go/src/github.com/douban-girls/crawler/main.go
         depends_on:
             - db
@@ -58,7 +59,3 @@ services:
 
 #  NTFS in windows
 #  https://forums.docker.com/t/trying-to-get-postgres-to-work-on-persistent-windows-mount-two-issues/12456/5?u=friism
-volumes:
-    pgdata:
-        external: true
-
