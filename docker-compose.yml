@@ -18,7 +18,7 @@ services:
         ports:
             - "9000:9000"
         volumes:
-            - ~/code/golang/src/github.com/douban-girls/douban-girls-server:/usr/src/app
+            - ~/code/golang/src/github.com/douban-girls/server:/usr/src/app
         depends_on:
             - redis
             - db
@@ -28,7 +28,7 @@ services:
         image: annatarhe/revel:v0.0.4
         volumes:
             - ~/code/golang/src:/go/src
-        command: revel run github.com/douban-girls/douban-girls-server
+        command: revel run github.com/douban-girls/server
         environment:
             - GOROOT_BOOTSTRAP=/usr/local/go
         ports:
@@ -39,23 +39,29 @@ services:
         links:
             - db
             - redis
-    pro-crawler:
-        image: golang:1.8.3
+    revel-test:
+        image: annatarhe/revel:v0.0.4
         volumes:
             - ~/code/golang/src:/go/src
-        # the build file must be named as `go-crawler`
-        command: ./tmp/go-crawler
-        links:
-            - db
-    dev-crawler:
-        image: golang:1.8.3
-        volumes:
-            - ~/code/golang/src:/go/src
-        command: go run /go/src/github.com/douban-girls/crawler/main.go
+        command: revel test github.com/douban-girls/server
+        environment:
+            - GOROOT_BOOTSTRAP=/usr/local/go
+        ports:
+            - "9000:9000"
         depends_on:
+            - redis
             - db
         links:
             - db
-
-#  NTFS in windows
-#  https://forums.docker.com/t/trying-to-get-postgres-to-work-on-persistent-windows-mount-two-issues/12456/5?u=friism
+            - redis
+    crawler-py:
+        image: annatarhe/scrapy:v0.2
+        volumes:
+            - ~/github/douban-girls/crawler:/py
+        command: scrapy crawl weibo
+        links:
+            - redis
+            - db
+        depends_on:
+            - redis
+            - db
