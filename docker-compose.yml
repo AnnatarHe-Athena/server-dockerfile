@@ -17,7 +17,7 @@ services:
         image: annatarhe/revel:v0.0.4
         volumes:
             - d:/github/golang/src:/go/src
-        command: revel run github.com/douban-girls/douban-girls-server
+        command: revel run github.com/douban-girls/server
         environment:
             - GOROOT_BOOTSTRAP=/usr/local/go
         ports:
