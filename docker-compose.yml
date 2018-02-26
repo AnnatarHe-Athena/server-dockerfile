@@ -3,7 +3,7 @@ services:
     db:
         image: postgres
         volumes:
-            - ~/code/douban-girls/server-dockerfile/data:/var/lib/postgresql/data
+            - ~/Code/server-dockerfile/data:/var/lib/postgresql/data
         environment:
             - POSTGRES_PASSWORD=admin
         ports:
@@ -55,10 +55,10 @@ services:
             - db
             - redis
     crawler-py:
-        image: annatarhe/scrapy:v0.2
+        image: annatarhe/scrapy:v0.4
         volumes:
-            - ~/github/douban-girls/crawler:/py
-        command: scrapy crawl weibo
+            - ~/Code/crawler:/py
+        command: scrapy crawl jike
         links:
             - redis
             - db
