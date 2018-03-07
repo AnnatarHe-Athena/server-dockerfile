@@ -12,41 +12,35 @@ services:
         image: redis
         ports:
             - "6379:6379"
-
-    revel:
-        image: annatarhe/revel:v0.0.4
+    api-server:
+        image: busybox
         volumes:
-            - d:/github/golang/src:/go/src
-        command: revel run github.com/douban-girls/server
-        environment:
-            - GOROOT_BOOTSTRAP=/usr/local/go
+            d:/github/douban-girls/server-dockerfile/production:/go
+        command: /go/api-server-exec
         ports:
             - "9000:9000"
         depends_on:
             - redis
             - db
+            - backend
         links:
-            - db
             - redis
-    pro-crawler:
-        image: golang:1.8.3
-        volumes:
-            - d:/github/golang/src:/tmp
-        # the build file must be named as `go-crawler`
-        command: ./tmp/go-crawler
-        links:
             - db
-    dev-crawler:
-        image: golang:1.8.3
+            - backend
+    backend:
+        image: busybox
         volumes:
-            - d:/github/golang/src:/go/src
-        command: go run /go/src/github.com/douban-girls/crawler/main.go
+            d:/github/douban-girls/server-dockerfile/production:/go
+        command: /go/backend-exec
         depends_on:
+            - redis
             - db
         links:
+            - redis
             - db
+
     crawler-py:
-        image: annatarhe/scrapy:v0.1
+        image: annatarhe/scrapy:v0.4
         volumes:
             - d:/github/douban-girls/crawler:/py
         command: scrapy crawl dbmeinv

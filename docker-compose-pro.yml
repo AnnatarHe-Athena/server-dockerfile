@@ -12,6 +12,33 @@ services:
         image: redis
         ports:
             - "6379:6379"
+    api-server:
+        image: busybox
+        volumes:
+            d:/github/douban-girls/server-dockerfile/production:/go
+        command: /go/api-server-exec
+        ports:
+            - "9000:9000"
+        depends_on:
+            - redis
+            - db
+            - backend
+        links:
+            - redis
+            - db
+            - backend
+    backend:
+        image: busybox
+        volumes:
+            d:/github/douban-girls/server-dockerfile/production:/go
+        command: /go/backend-exec
+        depends_on:
+            - redis
+            - db
+        links:
+            - redis
+            - db
+
     revel:
         image: annatarhe/revel:v0.0.4
         volumes:
