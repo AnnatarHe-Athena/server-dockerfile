@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: db
+  labels:
+    name: athena
+spec:
+  containers:
+  - name: db
+    image: postgres
+    env:
+        - POSTGRES_PASSWORD=admin
+    volumeMounts:
+      - mountPath: /var/lib/postgresql/data
+        name: pv
+    ports:
+      - containerPort: 9988
+  volumes:
+    - name: pv
+      hostPath:
+        path: /Users/annatarhe/Code/server-dockerfile/data
+        type: Directory
